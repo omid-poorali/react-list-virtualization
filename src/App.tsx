@@ -5,6 +5,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import names from "./assets/names.json";
 import { Button } from "@mui/material";
+import { FixedSizeList } from 'react-window';
 
 export function Application() {
   const [showAllNames, setShowAllNames] = useState(false);
@@ -22,21 +23,31 @@ export function Application() {
       >
         {showAllNames ? "Hide All Names" : "Show All Names"}
       </Button>
+
       <Box
         sx={{
-          overflowY: "scroll",
           border: "1px black solid",
           borderRadius: "4px",
-          height: "30rem"
         }}
       >
         <List>
-          {namesToShow.map(({ first, last }, index) => (
-            <ListItem key={index} divider>
-              <ListItemText primary={first} secondary={last} />
-            </ListItem>
-          ))}
+          <FixedSizeList
+            width="100%"
+            height={500}
+            itemCount={namesToShow.length}
+            itemSize={72}
+          >
+            {({ style, index }) => {
+              const currentItem = namesToShow[index];
+              return (
+                <ListItem style={style} divider>
+                  <ListItemText primary={currentItem.first} secondary={currentItem.last} />
+                </ListItem>
+              )
+            }}
+          </FixedSizeList>
         </List>
+
       </Box>
     </div>
   );
